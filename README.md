@@ -1,2 +1,2 @@
 # covid19-predictions
-A tool for prediction of Covid19 cases and deaths in your country
+A tool for predicting the evolution of Covid19 in your country.
