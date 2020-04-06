@@ -100,13 +100,13 @@ def main():
     plt.show()
     # plot
     st.header('Daily increase')
-    st.write('Now, we plot the daily increase of cases throghout the year of 2020.')
+    st.write('Now, we plot the daily increase of cases throughout the year of 2020.')
     st.pyplot()
 
     st.header('Predicting the outcome')
     st.subheader('*The Logistic model*')
 
-    st.write('The logistic model has been widely used to describe the growth of a population. An infection can be described as the growth of the population of a pathogen agent, so applying a logistic model seems reasonable. This formula is very known among data scientists because it’s used in the logistic regression classifier and as an activation function of neural networks.The most generic expression of a logistic function is:')
+    st.write('The logistic model has been widely used to describe the growth of a population. An infection can be described as the growth of the population of a pathogen agent, so applying a logistic model seems reasonable. This formula is very known among data scientists because it’s used in the logistic regression classifier and as an activation function of neural networks. The most generic expression of a logistic function is:')
     st.latex(r'''
          f(x,a,b,c) =
          \frac{c}{1+e^{-(x-b)/a)}}
@@ -240,7 +240,8 @@ def main():
     st.subheader('*Data Sources*')
     st.markdown('All data is collected from [Johns Hopkins University & Medicine.] (https://coronavirus.jhu.edu/map.html)')
     st.subheader('*Testing*')
-    st.write('This prediction does not take into account an eventual lack of testing for Covid19 in your country. The subnotification of cases can alter drastically the shape of the curves as well as the predictions. But unless subnotification is based on a State policy, we believe that official data is still useful for projections into the future.')
+    st.write('This prediction does not take into account an eventual lack of testing for Covid19 in your country. The sub-notification of cases can alter drastically the shape of the curves as well as the predictions. But unless sub-notification is due to a State policy, we believe that official data is still useful for projections into the future.')
+    st.write('There is a common aphorism in statistics: "**All models are wrong, but some are useful**."')   
     st.markdown('For a take on the limitation of models due to lack of testing, please refer to this article by Nate Silver: [Coronavirus Case Counts Are Meaningless, Unless you know something about testing. And even then, it gets complicated.](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/amp/?__twitter_impression=true)')
     st.subheader('*Model*')
     st.write('Although the logistic model seems to be the most reasonable one, the shape of the curve will probably change due to exogenous effects like new infection hotspots, government actions to bind the infection and so on.')
