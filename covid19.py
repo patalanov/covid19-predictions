@@ -24,11 +24,12 @@ def main():
   st.title('COVID19 predictions')
   # Add some text
   st.header('Check the pandemic evolution in your country.')
-
+  # object for fetching data
   covid19 = COVID19Py.COVID19()
 
   # get data from Hopkins University
   #data = covid19.getAll()
+  # or declare the fulllist
   countries_and_codes = [['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Andorra', 'AD'], ['Angola', 'AO'], ['Antigua and Barbuda', 'AG'], ['Argentina', 'AR'], ['Armenia', 'AM'], ['Australia', 'AU'], ['Austria', 'AT'], ['Azerbaijan', 'AZ'], ['Bahamas', 'BS'], ['Bahrain', 'BH'], ['Bangladesh', 'BD'], ['Barbados', 'BB'], ['Belarus', 'BY'], ['Belgium', 'BE'], ['Belize', 'BZ'], ['Benin', 'BJ'], ['Bhutan', 'BT'], ['Bolivia', 'BO'], ['Bosnia and Herzegovina', 'BA'], ['Botswana', 'BW'], ['Brazil', 'BR'], ['Brunei', 'BN'], ['Bulgaria', 'BG'], ['Burkina Faso', 'BF'], ['Burma', 'MM'], ['Burundi', 'BI'], ['Cabo Verde', 'CV'], ['Cambodia', 'KH'], ['Cameroon', 'CM'], ['Canada', 'CA'], ['Central African Republic', 'CF'], ['Chad', 'TD'], ['Chile', 'CL'], ['China', 'CN'], ['Colombia', 'CO'], ['Congo (Brazzaville)', 'CG'], ['Congo (Kinshasa)', 'CD'], ['Costa Rica', 'CR'], ["Cote d'Ivoire", 'CI'], ['Croatia', 'HR'], ['Cuba', 'CU'], ['Cyprus', 'CY'], ['Czechia', 'CZ'], ['Denmark', 'DK'], ['Diamond Princess', 'XX'], ['Djibouti', 'DJ'], ['Dominica', 'DM'], ['Dominican Republic', 'DO'], ['Ecuador', 'EC'], ['Egypt', 'EG'], ['El Salvador', 'SV'], ['Equatorial Guinea', 'GQ'], ['Eritrea', 'ER'], ['Estonia', 'EE'], ['Eswatini', 'SZ'], ['Ethiopia', 'ET'], ['Fiji', 'FJ'], ['Finland', 'FI'], ['France', 'FR'], ['Gabon', 'GA'], ['Gambia', 'GM'], ['Georgia', 'GE'], ['Germany', 'DE'], ['Ghana', 'GH'], ['Greece', 'GR'], ['Grenada', 'GD'], ['Guatemala', 'GT'], ['Guinea', 'GN'], ['Guinea-Bissau', 'GW'], ['Guyana', 'GY'], ['Haiti', 'HT'], ['Holy See', 'VA'], ['Honduras', 'HN'], ['Hungary', 'HU'], ['Iceland', 'IS'], ['India', 'IN'], ['Indonesia', 'ID'], ['Iran', 'IR'], ['Iraq', 'IQ'], ['Ireland', 'IE'], ['Israel', 'IL'], ['Italy', 'IT'], ['Jamaica', 'JM'], ['Japan', 'JP'], ['Jordan', 'JO'], ['Kazakhstan', 'KZ'], ['Kenya', 'KE'], ['Korea, South', 'KR'], ['Kosovo', 'XK'], ['Kuwait', 'KW'], ['Kyrgyzstan', 'KG'], ['Laos', 'LA'], ['Latvia', 'LV'], ['Lebanon', 'LB'], ['Liberia', 'LR'], ['Libya', 'LY'], ['Liechtenstein', 'LI'], ['Lithuania', 'LT'], ['Luxembourg', 'LU'], ['MS Zaandam', 'XX'], ['Madagascar', 'MG'], ['Malawi', 'MW'], ['Malaysia', 'MY'], ['Maldives', 'MV'], ['Mali', 'ML'], ['Malta', 'MT'], ['Mauritania', 'MR'], ['Mauritius', 'MU'], ['Mexico', 'MX'], ['Moldova', 'MD'], ['Monaco', 'MC'], ['Mongolia', 'MN'], ['Montenegro', 'ME'], ['Morocco', 'MA'], ['Mozambique', 'MZ'], ['Namibia', 'NA'], ['Nepal', 'NP'], ['Netherlands', 'NL'], ['New Zealand', 'NZ'], ['Nicaragua', 'NI'], ['Niger', 'NE'], ['Nigeria', 'NG'], ['North Macedonia', 'MK'], ['Norway', 'NO'], ['Oman', 'OM'], ['Pakistan', 'PK'], ['Panama', 'PA'], ['Papua New Guinea', 'PG'], ['Paraguay', 'PY'], ['Peru', 'PE'], ['Philippines', 'PH'], ['Poland', 'PL'], ['Portugal', 'PT'], ['Qatar', 'QA'], ['Romania', 'RO'], ['Russia', 'RU'], ['Rwanda', 'RW'], ['Saint Kitts and Nevis', 'KN'], ['Saint Lucia', 'LC'], ['Saint Vincent and the Grenadines', 'VC'], ['San Marino', 'SM'], ['Saudi Arabia', 'SA'], ['Senegal', 'SN'], ['Serbia', 'RS'], ['Seychelles', 'SC'], ['Sierra Leone', 'SL'], ['Singapore', 'SG'], ['Slovakia', 'SK'], ['Slovenia', 'SI'], ['Somalia', 'SO'], ['South Africa', 'ZA'], ['Spain', 'ES'], ['Sri Lanka', 'LK'], ['Sudan', 'SD'], ['Suriname', 'SR'], ['Sweden', 'SE'], ['Switzerland', 'CH'], ['Syria', 'SY'], ['Taiwan*', 'TW'], ['Tanzania', 'TZ'], ['Thailand', 'TH'], ['Timor-Leste', 'TL'], ['Togo', 'TG'], ['Trinidad and Tobago', 'TT'], ['Tunisia', 'TN'], ['Turkey', 'TR'], ['US', 'US'], ['Uganda', 'UG'], ['Ukraine', 'UA'], ['United Arab Emirates', 'AE'], ['United Kingdom', 'GB'], ['Uruguay', 'UY'], ['Uzbekistan', 'UZ'], ['Venezuela', 'VE'], ['Vietnam', 'VN'], ['West Bank and Gaza', 'PS'], ['Zambia', 'ZM'], ['Zimbabwe', 'ZW']]
   # pick your country
   select = st.multiselect("Select one country:", [item[0] for item in countries_and_codes])
@@ -46,27 +47,23 @@ def main():
     						 columns=['day', 'deaths'])
     # merge into one single dataframe
     df = cases_df.merge(deaths_df, on='day')
-    print (df)
-
+    # add culumn for 'day'
     df = df.loc[:, ['day','deaths','cases']]
-    # set first day
+    # set first day of pendemic
     first_day = datetime(2020, 1, 2) - timedelta(days=1)
     # time format
     FMT = "%Y-%m-%dT%H:%M:%SZ"
     # strip and correct timelines
     df['day'] = df['day'].map(lambda x: (datetime.strptime(x, FMT) - first_day).days)
-    
+    # bring steramlit to the stage
     st.header('Timeline of cases and deaths')
     st.write('Day 01 of pandemic outbreak is January 1st, 2020.')
+    # make numerical dataframe optional
     if st.checkbox('Show numeric data'):
       st.dataframe(df.style.highlight_max(axis=0))
-    # show data on a line chart
     st.write('The data plots the following line chart for cases and deaths.')
-
+    # show data on a line chart
     st.line_chart(df)
-    #df.tail()
-    #df['day'] = np.arange(len(merged_df))
-
     # the following block is just for displaying the input data, with some unused augmentation
     dfG = df.copy()
     dfG['cases_diff'] = dfG.diff()['cases']
@@ -78,11 +75,10 @@ def main():
     st.header('Data for the past 7 days')
     st.write('In this table, we show the growth of infection on a daily basis, which is crucial to understand the speed of infection. Top values are highlighted.')
     st.dataframe(dfG[-7:].style.highlight_max(axis=0))
-
+    # add cases growth
     dfg2 = dfG[-14:]
     x = dfg2['day'].tolist()
     y = dfg2['cases_growth_%'].tolist()
-
     # Daily increase in the infected population
     plt.rc('font', size=14)
     plt.figure(figsize=(8, 4))
@@ -98,14 +94,13 @@ def main():
     plt.ylabel("Daily % increase")
     plt.legend()
     plt.show()
-    # plot
+    # header, text and plot
     st.header('Daily increase')
     st.write('Now, we plot the daily increase of cases throughout the year of 2020.')
     st.pyplot()
-
+    # A brief theoretical explanation
     st.header('Predicting the outcome')
     st.subheader('*The Logistic model*')
-
     st.write('The logistic model has been widely used to describe the growth of a population. An infection can be described as the growth of the population of a pathogen agent, so applying a logistic model seems reasonable. This formula is very known among data scientists because it’s used in the logistic regression classifier and as an activation function of neural networks. The most generic expression of a logistic function is:')
     st.latex(r'''
          f(x,a,b,c) =
@@ -157,7 +152,6 @@ def main():
 
         return y_max
 
-
     def add_real_data(df, label,column = 'cases', color=None):
         x = df['day'].tolist()
         y = df[column].tolist()
@@ -181,7 +175,7 @@ def main():
         plt.legend()
         plt.show()
 
-    # Plot 1. data & projections, for today and the former 2 days
+    # Data & projections, for today and the former 2 days
     plt.figure(figsize=(12, 8))
     add_real_data(df[:-2], "2 days ago")
     add_real_data(df[-2:-1], "yesterday")
@@ -190,27 +184,20 @@ def main():
     add_logistic_curve(df[:-1], "yesterday", dashes=[4, 4])
     y_max = add_logistic_curve(df, "today")
     label_and_show_plot(plt, "Best logistic fit with the freshest data", y_max)
-
+    # A bit more theory 
     st.header('Prediction of maximum cases')
     st.write('At high time values, the number of infected people gets closer and closer to *c* and that’s the point at which we can say that the infection has ended. This function has also an inflection point at *b*, that is the point at which the first derivative starts to decrease (i.e. the peak after which the infection starts to become less aggressive and decreases).')
+    # plot
     st.pyplot(clear_figure=False)
-
     # fit the data to the model (find the model variables that best approximate)
-    #st.header('Prediction of maximum cases')
     st.subheader('Predictions as of *today*, *yesterday* and *2 days ago*')
 
     print_prediction(df[:-2], "2 days ago")
     print_prediction(df[:-1], "yesterday")
     pred = print_prediction(df, "today")
-    #print()
-    #plt.rc('font', size=14)
-    #st.pyplot(clear_figure=False)
-
-    # show
+    # PREDICTION 1
     st.header('Infection stabilization')
     st.markdown("Predictions as of today, the total infection should stabilize at **" + str(int(round(pred))) + "** cases.")
-    # st.pyplot()
-
     # Plot
     plt.figure(figsize=(12, 8))
     add_real_data(df[:-2], "2 days ago", column = 'deaths')
@@ -232,10 +219,10 @@ def main():
     print()
     html_print("As of today, the total deaths should stabilize at <b>" + str(int(round(pred))) + "</b>")
 
-
+    # PREDICTION 2
     st.header('Deaths stabilization')
     st.markdown("As of today, the total number of deaths should stabilize at **" + str(int(round(pred))) + "** cases.")
-
+    # Final considerations
     st.header('Notes')
     st.subheader('*Data Sources*')
     st.markdown('All data is collected from [Johns Hopkins University & Medicine.] (https://coronavirus.jhu.edu/map.html)')
@@ -245,7 +232,7 @@ def main():
     st.subheader('*Model*')
     st.write('There is a common aphorism in statistics: "**All models are wrong, but some are useful**."')   
     st.write('Although the logistic model seems to be the most reasonable one, the shape of the curve will probably change due to exogenous effects like new infection hotspots, government actions to bind the infection and so on.')
-    st.markdown('"*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*". Quote from Adam’s Kucharski book [The Rules of Contagion](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
+    st.markdown('"*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*". Quote from Adam’s Kucharski book [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
     st.write('Predictions of this model will start to become useful only within a few weeks, reasonably after the infection peak.')
     st.subheader('*Credits*')
     st.write('This page was created by Vítor Patalano, based on two main sources:')
@@ -253,7 +240,7 @@ def main():
     st.markdown('- This notebook by Enrico Ros: [Live analysis of the growth for the Italian COVID19 pandemic] (https://colab.research.google.com/drive/16CzLtNCnYq8x3gEBOgg2pMmDQngSD2vG#scrollTo=zJMZaWqJFNJz)')
     st.subheader('*Source code*')
     st.write('This project was created using python and streamlit. Source code can be found on the github link bellow. You are free to collaborate, fork, clone and improve on it. *Science must be contagious*!')
-    st.markdown('[COVID19 Predictions.](https://github.com/patalanov/covid19-predictions)')
+    st.markdown('[COVID19 Predictions on Github.](https://github.com/patalanov/covid19-predictions)')
     st.write('**Stay home.**')
 
 
