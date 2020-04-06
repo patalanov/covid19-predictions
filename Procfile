@@ -1,0 +1,1 @@
+web: setup.sh && streamlit run codiv19.py
