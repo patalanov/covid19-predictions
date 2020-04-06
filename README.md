@@ -1,13 +1,15 @@
 # covid19-predictions
 A tool for predicting the evolution of Covid19 in your country.
 
-## **Choose a country. Automatically, the app displays:**
+## **Choose a country.**
 
-![00](https://user-images.githubusercontent.com/6799245/78592855-1aaa3080-781c-11ea-83e2-93e4b89c181c.png)
+![00](https://user-images.githubusercontent.com/6799245/78595007-a2456e80-781f-11ea-9020-001640516b44.png)
+
+# Automatically, the app displays:
 
 ## **The timeline of cases and fatalities.**
 
-![01](https://user-images.githubusercontent.com/6799245/78592860-1bdb5d80-781c-11ea-9e04-a5ea0b13f9c2.png)
+![01](https://user-images.githubusercontent.com/6799245/78595118-d15be000-781f-11ea-92bb-5a36a4b2753a.png)
 
 ## **The data for the past 7 days.**
 
