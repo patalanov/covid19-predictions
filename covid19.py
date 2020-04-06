@@ -192,22 +192,23 @@ def main():
     label_and_show_plot(plt, "Best logistic fit with the freshest data", y_max)
 
     st.header('Prediction of maximum cases')
+    st.write('At high time values, the number of infected people gets closer and closer to *c* and that’s the point at which we can say that the infection has ended. This function has also an inflection point at *b*, that is the point at which the first derivative starts to decrease (i.e. the peak after which the infection starts to become less aggressive and decreases).')
     st.pyplot(clear_figure=False)
 
     # fit the data to the model (find the model variables that best approximate)
     #st.header('Prediction of maximum cases')
-    st.subheader('As of *today*, *yesterday* and *2 days ago*')
+    st.subheader('Predictions as of *today*, *yesterday* and *2 days ago*')
 
     print_prediction(df[:-2], "2 days ago")
     print_prediction(df[:-1], "yesterday")
     pred = print_prediction(df, "today")
     #print()
-    plt.rc('font', size=14)
-    st.pyplot(clear_figure=False)
+    #plt.rc('font', size=14)
+    #st.pyplot(clear_figure=False)
 
     # show
     st.header('Infection stabilization')
-    st.markdown("As of today, the total infection should stabilize at **" + str(int(round(pred))) + "** cases.")
+    st.markdown("Predictions as of today, the total infection should stabilize at **" + str(int(round(pred))) + "** cases.")
     # st.pyplot()
 
     # Plot
@@ -223,7 +224,7 @@ def main():
     st.header('Prediction of deaths')
     st.pyplot(clear_figure=False)
 
-    st.subheader('As of *today*, *yesterday* and *2 days ago*')
+    st.subheader('Predictions as of *today*, *yesterday* and *2 days ago*')
 
     print_prediction(df[:-2], "2 days ago", 'deaths')
     print_prediction(df[:-1], "yesterday", 'deaths')
@@ -234,8 +235,6 @@ def main():
 
     st.header('Deaths stabilization')
     st.markdown("As of today, the total number of deaths should stabilize at **" + str(int(round(pred))) + "** cases.")
-    st.pyplot()
-
 
     st.header('Notes')
     st.subheader('*Data Sources*')
