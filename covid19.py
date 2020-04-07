@@ -243,7 +243,7 @@ def main():
       st.write('This project was created using python and streamlit. Source code can be found on the github link bellow. You are free to collaborate, fork, clone and improve on it. *Science must be contagious*!')
       st.markdown('[COVID19 Predictions on Github.](https://github.com/patalanov/covid19-predictions)')
       st.write('**Stay home.**')
-    except HTTPError as e:
+    except Exception as e:
       print ('There is a problem with the server collecting the data from Hopkins University. Please try again later.', e)
 
 if __name__ == '__main__':
