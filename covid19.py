@@ -18,6 +18,12 @@ from scipy.optimize import fsolve
 import streamlit as st
 
 
+@st.cache
+def get_data():
+  covid19 = COVID19Py.COVID19()
+  country_data = covid19.getLocationByCountryCode([item[1] for item in countries_and_codes if item[0] == select[0]], timelines=True)
+  return country_data
+
 
 def main():
   # Add a title
@@ -25,7 +31,7 @@ def main():
   # Add some text
   st.header('Check the pandemic evolution in your country.')
   # object for fetching data
-  covid19 = COVID19Py.COVID19()
+  #covid19 = COVID19Py.COVID19()
 
   # get data from Hopkins University
   #data = covid19.getAll()
@@ -36,7 +42,7 @@ def main():
   if select:
     try:
       # query selected country
-      country = covid19.getLocationByCountryCode([item[1] for item in countries_and_codes if item[0] == select[0]], timelines=True)
+      country = get_data()
       # filter target data
       cases = country[0]["timelines"]["confirmed"]["timeline"]
       deaths =  country[0]["timelines"]["deaths"]["timeline"]
@@ -226,14 +232,14 @@ def main():
       # Final considerations
       st.header('Notes')
       st.subheader('*Data Sources*')
-      st.markdown('All data is collected from [Johns Hopkins University & Medicine.] (https://coronavirus.jhu.edu/map.html)')
+      st.markdown('All data is collected from [Worldwide Data repository operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE).] (https://coronavirus.jhu.edu/map.html)')
       st.subheader('*Testing*')
       st.write('This prediction does not take into account an eventual lack of testing for Covid19 in your country. The sub-notification of cases can alter drastically the shape of the curves as well as the predictions. But unless sub-notification is due to a State policy, we believe that official data is still useful for projections into the future.')
       st.markdown('For a take on the limitation of models due to lack of testing, please refer to this article by Nate Silver: [Coronavirus Case Counts Are Meaningless, Unless you know something about testing. And even then, it gets complicated.](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/amp/?__twitter_impression=true)')
       st.subheader('*Model*')
       st.write('There is a common aphorism in statistics: "**All models are wrong, but some are useful**."')   
       st.write('Although the logistic model seems to be the most reasonable one, the shape of the curve will probably change due to exogenous effects like new infection hotspots, government actions to bind the infection and so on.')
-      st.markdown('"*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*". Quote from Adam’s Kucharski book [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
+      st.markdown('">*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*". Quote from Adam’s Kucharski book [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
       st.write('Predictions of this model will start to become useful only within a few weeks, reasonably after the infection peak.')
       st.subheader('*Credits*')
       st.write('This page was created by Vítor Patalano, based on two main sources:')
@@ -244,7 +250,7 @@ def main():
       st.markdown('[COVID19 Predictions on Github.](https://github.com/patalanov/covid19-predictions)')
       st.write('**Stay home.**')
     except Exception as e:
-      print ('There is a problem with the server collecting the data from Hopkins University. Please try again later.', e)
+      print ('There is a problem with the server collecting the data. Please try again later.', e)
 
 if __name__ == '__main__':
   main()
