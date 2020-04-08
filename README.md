@@ -39,6 +39,10 @@ A tool for predicting the evolution of Covid19 in your country.
 
 ![08](https://user-images.githubusercontent.com/6799245/78592883-20077b00-781c-11ea-8c7f-8053783387d2.png)
 
+## **You can also make predictions adding some percentual of sub-notification of cases.**
+
+![09](https://user-images.githubusercontent.com/6799245/78738782-1455aa80-7929-11ea-9f37-120c947e4ccb.png)
+
 ## Notes
 Data Sources
 All data is collected from [Johns Hopkins University & Medicine.](https://coronavirus.jhu.edu/map.html)
