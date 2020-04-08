@@ -94,7 +94,7 @@ def main():
                    columns=['day', 'deaths'])
       # apply subnotification percentage
       # if none was entered, it is == 1
-      deaths_df.deaths*=sub_factor
+      #deaths_df.deaths*=sub_factor
       # merge into one single dataframe
       df = cases_df.merge(deaths_df, on='day')
       # add culumn for 'day'
@@ -290,7 +290,7 @@ def main():
       st.write('There is a common aphorism in statistics: "**All models are wrong, but some are useful**."')   
       st.write('Although the logistic model seems to be the most reasonable one, the shape of the curve will probably change due to exogenous effects like new infection hotspots, government actions to bind the infection and so on.')
       st.markdown('>*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*. -Adam Kucharski, [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
-      st.write('Predictions of this model will start to become useful only within a few weeks, reasonably after the infection peak.')
+      st.write('**Predictions of this model will start to become more useful only within a few weeks, reasonably after the infection peak.**')
       st.subheader('*Credits*')
       st.write('This page was created by Vítor Patalano, based on two main sources:')
       st.markdown('- This article by Gianluca Malato: [Covid-19 infection in Italy. Mathematical models and predictions] (https://towardsdatascience.com/covid-19-infection-in-italy-mathematical-models-and-predictions-7784b4d7dd8d)')
