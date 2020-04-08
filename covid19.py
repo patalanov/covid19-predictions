@@ -19,39 +19,82 @@ import streamlit as st
 
 
 @st.cache
-def get_data():
+def get_data(countries_and_codes, select):
+  # instantiate wrapper to data api
   covid19 = COVID19Py.COVID19()
+  # get data from Hopkins University
   country_data = covid19.getLocationByCountryCode([item[1] for item in countries_and_codes if item[0] == select[0]], timelines=True)
   return country_data
-
 
 def main():
   # Add a title
   st.title('COVID19 predictions')
   # Add some text
   st.header('Check the pandemic evolution in your country.')
-  # object for fetching data
-  #covid19 = COVID19Py.COVID19()
-
-  # get data from Hopkins University
-  #data = covid19.getAll()
-  # or declare the fulllist
-  countries_and_codes = [['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Andorra', 'AD'], ['Angola', 'AO'], ['Antigua and Barbuda', 'AG'], ['Argentina', 'AR'], ['Armenia', 'AM'], ['Australia', 'AU'], ['Austria', 'AT'], ['Azerbaijan', 'AZ'], ['Bahamas', 'BS'], ['Bahrain', 'BH'], ['Bangladesh', 'BD'], ['Barbados', 'BB'], ['Belarus', 'BY'], ['Belgium', 'BE'], ['Belize', 'BZ'], ['Benin', 'BJ'], ['Bhutan', 'BT'], ['Bolivia', 'BO'], ['Bosnia and Herzegovina', 'BA'], ['Botswana', 'BW'], ['Brazil', 'BR'], ['Brunei', 'BN'], ['Bulgaria', 'BG'], ['Burkina Faso', 'BF'], ['Burma', 'MM'], ['Burundi', 'BI'], ['Cabo Verde', 'CV'], ['Cambodia', 'KH'], ['Cameroon', 'CM'], ['Canada', 'CA'], ['Central African Republic', 'CF'], ['Chad', 'TD'], ['Chile', 'CL'], ['China', 'CN'], ['Colombia', 'CO'], ['Congo (Brazzaville)', 'CG'], ['Congo (Kinshasa)', 'CD'], ['Costa Rica', 'CR'], ["Cote d'Ivoire", 'CI'], ['Croatia', 'HR'], ['Cuba', 'CU'], ['Cyprus', 'CY'], ['Czechia', 'CZ'], ['Denmark', 'DK'], ['Diamond Princess', 'XX'], ['Djibouti', 'DJ'], ['Dominica', 'DM'], ['Dominican Republic', 'DO'], ['Ecuador', 'EC'], ['Egypt', 'EG'], ['El Salvador', 'SV'], ['Equatorial Guinea', 'GQ'], ['Eritrea', 'ER'], ['Estonia', 'EE'], ['Eswatini', 'SZ'], ['Ethiopia', 'ET'], ['Fiji', 'FJ'], ['Finland', 'FI'], ['France', 'FR'], ['Gabon', 'GA'], ['Gambia', 'GM'], ['Georgia', 'GE'], ['Germany', 'DE'], ['Ghana', 'GH'], ['Greece', 'GR'], ['Grenada', 'GD'], ['Guatemala', 'GT'], ['Guinea', 'GN'], ['Guinea-Bissau', 'GW'], ['Guyana', 'GY'], ['Haiti', 'HT'], ['Holy See', 'VA'], ['Honduras', 'HN'], ['Hungary', 'HU'], ['Iceland', 'IS'], ['India', 'IN'], ['Indonesia', 'ID'], ['Iran', 'IR'], ['Iraq', 'IQ'], ['Ireland', 'IE'], ['Israel', 'IL'], ['Italy', 'IT'], ['Jamaica', 'JM'], ['Japan', 'JP'], ['Jordan', 'JO'], ['Kazakhstan', 'KZ'], ['Kenya', 'KE'], ['Korea, South', 'KR'], ['Kosovo', 'XK'], ['Kuwait', 'KW'], ['Kyrgyzstan', 'KG'], ['Laos', 'LA'], ['Latvia', 'LV'], ['Lebanon', 'LB'], ['Liberia', 'LR'], ['Libya', 'LY'], ['Liechtenstein', 'LI'], ['Lithuania', 'LT'], ['Luxembourg', 'LU'], ['MS Zaandam', 'XX'], ['Madagascar', 'MG'], ['Malawi', 'MW'], ['Malaysia', 'MY'], ['Maldives', 'MV'], ['Mali', 'ML'], ['Malta', 'MT'], ['Mauritania', 'MR'], ['Mauritius', 'MU'], ['Mexico', 'MX'], ['Moldova', 'MD'], ['Monaco', 'MC'], ['Mongolia', 'MN'], ['Montenegro', 'ME'], ['Morocco', 'MA'], ['Mozambique', 'MZ'], ['Namibia', 'NA'], ['Nepal', 'NP'], ['Netherlands', 'NL'], ['New Zealand', 'NZ'], ['Nicaragua', 'NI'], ['Niger', 'NE'], ['Nigeria', 'NG'], ['North Macedonia', 'MK'], ['Norway', 'NO'], ['Oman', 'OM'], ['Pakistan', 'PK'], ['Panama', 'PA'], ['Papua New Guinea', 'PG'], ['Paraguay', 'PY'], ['Peru', 'PE'], ['Philippines', 'PH'], ['Poland', 'PL'], ['Portugal', 'PT'], ['Qatar', 'QA'], ['Romania', 'RO'], ['Russia', 'RU'], ['Rwanda', 'RW'], ['Saint Kitts and Nevis', 'KN'], ['Saint Lucia', 'LC'], ['Saint Vincent and the Grenadines', 'VC'], ['San Marino', 'SM'], ['Saudi Arabia', 'SA'], ['Senegal', 'SN'], ['Serbia', 'RS'], ['Seychelles', 'SC'], ['Sierra Leone', 'SL'], ['Singapore', 'SG'], ['Slovakia', 'SK'], ['Slovenia', 'SI'], ['Somalia', 'SO'], ['South Africa', 'ZA'], ['Spain', 'ES'], ['Sri Lanka', 'LK'], ['Sudan', 'SD'], ['Suriname', 'SR'], ['Sweden', 'SE'], ['Switzerland', 'CH'], ['Syria', 'SY'], ['Taiwan*', 'TW'], ['Tanzania', 'TZ'], ['Thailand', 'TH'], ['Timor-Leste', 'TL'], ['Togo', 'TG'], ['Trinidad and Tobago', 'TT'], ['Tunisia', 'TN'], ['Turkey', 'TR'], ['US', 'US'], ['Uganda', 'UG'], ['Ukraine', 'UA'], ['United Arab Emirates', 'AE'], ['United Kingdom', 'GB'], ['Uruguay', 'UY'], ['Uzbekistan', 'UZ'], ['Venezuela', 'VE'], ['Vietnam', 'VN'], ['West Bank and Gaza', 'PS'], ['Zambia', 'ZM'], ['Zimbabwe', 'ZW']]
+  # all countries
+  countries_and_codes = [
+   ['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Andorra', 'AD'], ['Angola', 'AO'], 
+   ['Antigua and Barbuda', 'AG'], ['Argentina', 'AR'], ['Armenia', 'AM'], ['Australia', 'AU'], ['Austria', 'AT'], 
+   ['Azerbaijan', 'AZ'], ['Bahamas', 'BS'], ['Bahrain', 'BH'], ['Bangladesh', 'BD'], ['Barbados', 'BB'], 
+   ['Belarus', 'BY'], ['Belgium', 'BE'], ['Belize', 'BZ'], ['Benin', 'BJ'], ['Bhutan', 'BT'], ['Bolivia', 'BO'], 
+   ['Bosnia and Herzegovina', 'BA'], ['Botswana', 'BW'], ['Brazil', 'BR'], ['Brunei', 'BN'], ['Bulgaria', 'BG'], 
+   ['Burkina Faso', 'BF'], ['Burma', 'MM'], ['Burundi', 'BI'], ['Cabo Verde', 'CV'], ['Cambodia', 'KH'], 
+   ['Cameroon', 'CM'], ['Canada', 'CA'], ['Central African Republic', 'CF'], ['Chad', 'TD'], ['Chile', 'CL'], 
+   ['China', 'CN'], ['Colombia', 'CO'], ['Congo (Brazzaville)', 'CG'], ['Congo (Kinshasa)', 'CD'], 
+   ['Costa Rica', 'CR'], ["Cote d'Ivoire", 'CI'], ['Croatia', 'HR'], ['Cuba', 'CU'], ['Cyprus', 'CY'], 
+   ['Czechia', 'CZ'], ['Denmark', 'DK'], ['Diamond Princess', 'XX'], ['Djibouti', 'DJ'], ['Dominica', 'DM'], 
+   ['Dominican Republic', 'DO'], ['Ecuador', 'EC'], ['Egypt', 'EG'], ['El Salvador', 'SV'], 
+   ['Equatorial Guinea', 'GQ'], ['Eritrea', 'ER'], ['Estonia', 'EE'], ['Eswatini', 'SZ'], ['Ethiopia', 'ET'], 
+   ['Fiji', 'FJ'], ['Finland', 'FI'], ['France', 'FR'], ['Gabon', 'GA'], ['Gambia', 'GM'], ['Georgia', 'GE'], 
+   ['Germany', 'DE'], ['Ghana', 'GH'], ['Greece', 'GR'], ['Grenada', 'GD'], ['Guatemala', 'GT'], ['Guinea', 'GN'], 
+   ['Guinea-Bissau', 'GW'], ['Guyana', 'GY'], ['Haiti', 'HT'], ['Holy See', 'VA'], ['Honduras', 'HN'], 
+   ['Hungary', 'HU'], ['Iceland', 'IS'], ['India', 'IN'], ['Indonesia', 'ID'], ['Iran', 'IR'], ['Iraq', 'IQ'], 
+   ['Ireland', 'IE'], ['Israel', 'IL'], ['Italy', 'IT'], ['Jamaica', 'JM'], ['Japan', 'JP'], ['Jordan', 'JO'], 
+   ['Kazakhstan', 'KZ'], ['Kenya', 'KE'], ['Korea, South', 'KR'], ['Kosovo', 'XK'], ['Kuwait', 'KW'], 
+   ['Kyrgyzstan', 'KG'], ['Laos', 'LA'], ['Latvia', 'LV'], ['Lebanon', 'LB'], ['Liberia', 'LR'], ['Libya', 'LY'], 
+   ['Liechtenstein', 'LI'], ['Lithuania', 'LT'], ['Luxembourg', 'LU'], ['MS Zaandam', 'XX'], ['Madagascar', 'MG'], 
+   ['Malawi', 'MW'], ['Malaysia', 'MY'], ['Maldives', 'MV'], ['Mali', 'ML'], ['Malta', 'MT'], ['Mauritania', 'MR'], 
+   ['Mauritius', 'MU'], ['Mexico', 'MX'], ['Moldova', 'MD'], ['Monaco', 'MC'], ['Mongolia', 'MN'], ['Montenegro', 'ME'], 
+   ['Morocco', 'MA'], ['Mozambique', 'MZ'], ['Namibia', 'NA'], ['Nepal', 'NP'], ['Netherlands', 'NL'], ['New Zealand', 'NZ'], 
+   ['Nicaragua', 'NI'], ['Niger', 'NE'], ['Nigeria', 'NG'], ['North Macedonia', 'MK'], ['Norway', 'NO'], ['Oman', 'OM'], 
+   ['Pakistan', 'PK'], ['Panama', 'PA'], ['Papua New Guinea', 'PG'], ['Paraguay', 'PY'], ['Peru', 'PE'], ['Philippines', 'PH'], 
+   ['Poland', 'PL'], ['Portugal', 'PT'], ['Qatar', 'QA'], ['Romania', 'RO'], ['Russia', 'RU'], ['Rwanda', 'RW'], 
+   ['Saint Kitts and Nevis', 'KN'], ['Saint Lucia', 'LC'], ['Saint Vincent and the Grenadines', 'VC'], ['San Marino', 'SM'], 
+   ['Saudi Arabia', 'SA'], ['Senegal', 'SN'], ['Serbia', 'RS'], ['Seychelles', 'SC'], ['Sierra Leone', 'SL'], 
+   ['Singapore', 'SG'], ['Slovakia', 'SK'], ['Slovenia', 'SI'], ['Somalia', 'SO'], ['South Africa', 'ZA'], ['Spain', 'ES'], 
+   ['Sri Lanka', 'LK'], ['Sudan', 'SD'], ['Suriname', 'SR'], ['Sweden', 'SE'], ['Switzerland', 'CH'], ['Syria', 'SY'], 
+   ['Taiwan*', 'TW'], ['Tanzania', 'TZ'], ['Thailand', 'TH'], ['Timor-Leste', 'TL'], ['Togo', 'TG'], 
+   ['Trinidad and Tobago', 'TT'], ['Tunisia', 'TN'], ['Turkey', 'TR'], ['US', 'US'], ['Uganda', 'UG'], ['Ukraine', 'UA'], 
+   ['United Arab Emirates', 'AE'], ['United Kingdom', 'GB'], ['Uruguay', 'UY'], ['Uzbekistan', 'UZ'], ['Venezuela', 'VE'], 
+   ['Vietnam', 'VN'], ['West Bank and Gaza', 'PS'], ['Zambia', 'ZM'], ['Zimbabwe', 'ZW']]
   # pick your country
   select = st.multiselect("Select one country:", [item[0] for item in countries_and_codes])
   if select:
     try:
       # query selected country
-      country = get_data()
+      country = get_data(countries_and_codes, select)
+      # the subnotification factor where official data == 100% accurate
+      sub_factor = 1
       # filter target data
       cases = country[0]["timelines"]["confirmed"]["timeline"]
+      #print ('CASES', cases, 'ITEMS', cases.items())
       deaths =  country[0]["timelines"]["deaths"]["timeline"]
       # create dataframes for cases
+      st.sidebar.subheader('Sub-notification')
+      st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
+      sub_factor = st.sidebar.number_input("Sub-notification in %", min_value=1)
+      # create dataframes for cases
       cases_df = pd.DataFrame(list(cases.items()),
-      						 columns=['day', 'cases'])
+                   columns=['day', 'cases'])
+      # apply subnotification percentage
+      # if none was entered, it is == 1
+      cases_df.cases*=sub_factor
       # create dataframes for deaths
       deaths_df = pd.DataFrame(list(deaths.items()),
-      						 columns=['day', 'deaths'])
+                   columns=['day', 'deaths'])
+      # apply subnotification percentage
+      # if none was entered, it is == 1
+      deaths_df.deaths*=sub_factor
       # merge into one single dataframe
       df = cases_df.merge(deaths_df, on='day')
       # add culumn for 'day'
@@ -65,6 +108,7 @@ def main():
       # bring steramlit to the stage
       st.header('Timeline of cases and deaths')
       st.write('Day 01 of pandemic outbreak is January 1st, 2020.')
+      st.write('(*For scenarios with sub-notification, click on side bar*)')
       # make numerical dataframe optional
       if st.checkbox('Show numeric data'):
         st.dataframe(df.style.highlight_max(axis=0))
@@ -79,7 +123,7 @@ def main():
       print(" data for the last 7 days")
       print (dfG[-7:])
       # show last 7 days in case growth
-      st.header('Data for the past 7 days')
+      st.header('Official data for the past 7 days')
       st.write('In this table, we show the growth of infection on a daily basis, which is crucial to understand the speed of infection. Top values are highlighted.')
       st.dataframe(dfG[-7:].style.highlight_max(axis=0))
       # add cases growth
@@ -193,6 +237,12 @@ def main():
       label_and_show_plot(plt, "Best logistic fit with the freshest data", y_max)
       # A bit more theory 
       st.header('Prediction of maximum cases')
+
+      if sub_factor == 1:
+        st.markdown("With sub-notification of 0%.")
+      else:
+        st.markdown("With sub-notification of **" + str(int(round(sub_factor))) + "** %.")
+
       st.write('At high time values, the number of infected people gets closer and closer to *c* and that’s the point at which we can say that the infection has ended. This function has also an inflection point at *b*, that is the point at which the first derivative starts to decrease (i.e. the peak after which the infection starts to become less aggressive and decreases).')
       # plot
       st.pyplot(clear_figure=False)
@@ -232,14 +282,14 @@ def main():
       # Final considerations
       st.header('Notes')
       st.subheader('*Data Sources*')
-      st.markdown('All data is collected from [Worldwide Data repository operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE).] (https://coronavirus.jhu.edu/map.html)')
+      st.markdown('All data is operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE) and collected from the [Worldwide Data repository.] (https://coronavirus.jhu.edu/map.html)')
       st.subheader('*Testing*')
-      st.write('This prediction does not take into account an eventual lack of testing for Covid19 in your country. The sub-notification of cases can alter drastically the shape of the curves as well as the predictions. But unless sub-notification is due to a State policy, we believe that official data is still useful for projections into the future.')
+      st.write('Predictions that apply sub-notification of cases should be interpreted with *extreme caution*. Give preference to official data. Unless sub-notification is due to a State policy, we believe that official data is still useful for projections into the future.')
       st.markdown('For a take on the limitation of models due to lack of testing, please refer to this article by Nate Silver: [Coronavirus Case Counts Are Meaningless, Unless you know something about testing. And even then, it gets complicated.](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/amp/?__twitter_impression=true)')
       st.subheader('*Model*')
       st.write('There is a common aphorism in statistics: "**All models are wrong, but some are useful**."')   
       st.write('Although the logistic model seems to be the most reasonable one, the shape of the curve will probably change due to exogenous effects like new infection hotspots, government actions to bind the infection and so on.')
-      st.markdown('">*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*". Quote from Adam’s Kucharski book [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
+      st.markdown('>*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*. -Adam Kucharski, [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
       st.write('Predictions of this model will start to become useful only within a few weeks, reasonably after the infection peak.')
       st.subheader('*Credits*')
       st.write('This page was created by Vítor Patalano, based on two main sources:')
