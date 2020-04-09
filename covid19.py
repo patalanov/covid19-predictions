@@ -194,7 +194,7 @@ def main():
        # create sidebar for sub-notification scenarios
       st.sidebar.subheader('Sub-notification')
       st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
-      sub_factor = st.sidebar.number_input("Sub-notification in %", min_value=1)
+      sub_factor = st.sidebar.number_input("Sub-notification = x (multiply by)", min_value=1)
       # make numerical dataframe optional
       if st.checkbox('Show numeric data'):
         st.dataframe(df.style.highlight_max(axis=0))
