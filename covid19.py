@@ -327,7 +327,7 @@ def main():
       if sub_factor == 1:
         st.markdown("With sub-notification of 0%.")
       else:
-        st.markdown("With sub-notification of **" + str(int(round(sub_factor))) + "** %.")
+        st.markdown("With sub-notification adding up to **" + str(int(round(sub_factor))) + "times of actual cases.")
 
       st.write('At high time values, the number of infected people gets closer and closer to *c* and that’s the point at which we can say that the infection has ended. This function has also an inflection point at *b*, that is the point at which the first derivative starts to decrease (i.e. the peak after which the infection starts to become less aggressive and decreases).')
       # plot
