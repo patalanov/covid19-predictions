@@ -59,6 +59,8 @@ def main():
   st.title('COVID19 predictions')
   # get preliminary data
   countries, codes, cases, world_cases = get_codes()
+  st.header('Cases around the world:')
+  st.markdown(world_cases)
   # Add some text
   st.header('Check the pandemic evolution in your country.')
   # all countries
@@ -100,36 +102,53 @@ def main():
   # pick your country
   #df2 = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv')
 
-  fig = go.Figure(data=go.Choropleth(
-      locations = df['CODE'],
-      z = df['GDP (BILLIONS)'],
-      text = df['COUNTRY'],
-      colorscale = 'Blues',
-      autocolorscale=False,
-      reversescale=True,
-      marker_line_color='darkgray',
-      marker_line_width=0.5,
-      colorbar_tickprefix = '$',
-      colorbar_title = 'GDP<br>Billions US$',
-  ))
+  data = [go.Choropleth(
+      locations = codes,
+      z = cases,
+      text = countries,
+      colorscale = [
+          [0, "rgb(5, 10, 172)"],
+          [0.35, "rgb(40, 60, 190)"],
+          [0.5, "rgb(70, 100, 245)"],
+          [0.6, "rgb(90, 120, 245)"],
+          [0.7, "rgb(106, 137, 247)"],
+          [1, "rgb(220, 220, 220)"]
+      ],
+      autocolorscale = False,
+      reversescale = True,
+      marker = go.choropleth.Marker(
+          line = go.choropleth.marker.Line(
+              color = 'rgb(180,180,180)',
+              width = 0.5
+          )),
+      colorbar = go.choropleth.ColorBar(
+          #tickprefix = '$',
+          title = 'Cases'),
+  )]
 
-  fig.update_layout(
-      title_text='2014 Global GDP',
-      geo=dict(
-          showframe=False,
-          showcoastlines=False,
-          projection_type='equirectangular'
+  layout = go.Layout(
+      title = go.layout.Title(
+          text = 'Covid19 Global Map'
       ),
-      annotations = [dict(
-          x=0.55,
-          y=0.1,
-          xref='paper',
-          yref='paper',
-          text='Source: <a href="https://www.cia.gov/library/publications/the-world-factbook/fields/2195.html">\
-              CIA World Factbook</a>',
+      geo = go.layout.Geo(
+          showframe = False,
+          showcoastlines = False,
+          projection = go.layout.geo.Projection(
+              type = 'equirectangular'
+          )
+      ),
+      annotations = [go.layout.Annotation(
+          x = 0.55,
+          y = 0.1,
+          xref = 'paper',
+          yref = 'paper',
+          text = 'Source: <a href="https://covid.ourworldindata.org">\
+              Our World In Data</a>',
           showarrow = False
       )]
   )
+
+  fig = go.Figure(data = data, layout = layout)
   #fig.show()
   st.plotly_chart(fig)
   select = st.multiselect("Select one country:", [item[0] for item in countries_and_codes])
