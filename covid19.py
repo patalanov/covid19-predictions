@@ -161,6 +161,10 @@ def main():
       country = get_data(countries_and_codes, select)
       # the subnotification factor where official data == 100% accurate
       sub_factor = 1
+      # create sidebar for sub-notification scenarios
+      st.sidebar.subheader('Sub-notification')
+      st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
+      sub_factor = st.sidebar.number_input("Sub-notification = x (multiply by)", min_value=1)
       # filter target data
       cases = country[0]["timelines"]["confirmed"]["timeline"]
       #print ('CASES', cases, 'ITEMS', cases.items())
@@ -191,10 +195,6 @@ def main():
       st.header('Timeline of cases and deaths')
       st.write('Day 01 of pandemic outbreak is January 1st, 2020.')
       st.write('(*For scenarios with sub-notification, click on side bar*)')
-       # create sidebar for sub-notification scenarios
-      st.sidebar.subheader('Sub-notification')
-      st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
-      sub_factor = st.sidebar.number_input("Sub-notification = x (multiply by)", min_value=1)
       # make numerical dataframe optional
       if st.checkbox('Show numeric data'):
         st.dataframe(df.style.highlight_max(axis=0))
