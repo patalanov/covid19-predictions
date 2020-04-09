@@ -1,4 +1,4 @@
-# covid19-predictions
+# Covid19-predictions
 A tool for predicting the evolution of Covid19 in your country.
 
 # **Choose a country.**

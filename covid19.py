@@ -8,6 +8,8 @@ import itertools
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+import pycountry
 from PIL import Image
 from IPython.display import HTML as html_print
 # machine learning libraries
@@ -16,6 +18,32 @@ from scipy.optimize import curve_fit
 from scipy.optimize import fsolve
 # app
 import streamlit as st
+
+
+@st.cache
+def get_codes():
+  df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
+
+  def look(x):
+      try:
+          return pycountry.countries.search_fuzzy(x)[0].alpha_3
+      except:
+          return x
+
+  countries = list(df)[2:]
+
+  world_cases = df['World'].iloc[-1]
+
+  cases=[]
+  for item in df:
+    if item in countries:
+      # most recent is the last
+      n = df[item].iloc[-1]
+      cases.append(n)
+
+  iso3_codes = [look(c) for c in countries]
+
+  return (countries, iso3_codes, cases, world_cases)
 
 
 @st.cache
@@ -68,6 +96,40 @@ def main():
    ['United Arab Emirates', 'AE'], ['United Kingdom', 'GB'], ['Uruguay', 'UY'], ['Uzbekistan', 'UZ'], ['Venezuela', 'VE'], 
    ['Vietnam', 'VN'], ['West Bank and Gaza', 'PS'], ['Zambia', 'ZM'], ['Zimbabwe', 'ZW']]
   # pick your country
+  #df2 = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv')
+
+  fig = go.Figure(data=go.Choropleth(
+      locations = df['CODE'],
+      z = df['GDP (BILLIONS)'],
+      text = df['COUNTRY'],
+      colorscale = 'Blues',
+      autocolorscale=False,
+      reversescale=True,
+      marker_line_color='darkgray',
+      marker_line_width=0.5,
+      colorbar_tickprefix = '$',
+      colorbar_title = 'GDP<br>Billions US$',
+  ))
+
+  fig.update_layout(
+      title_text='2014 Global GDP',
+      geo=dict(
+          showframe=False,
+          showcoastlines=False,
+          projection_type='equirectangular'
+      ),
+      annotations = [dict(
+          x=0.55,
+          y=0.1,
+          xref='paper',
+          yref='paper',
+          text='Source: <a href="https://www.cia.gov/library/publications/the-world-factbook/fields/2195.html">\
+              CIA World Factbook</a>',
+          showarrow = False
+      )]
+  )
+  #fig.show()
+  st.plotly_chart(fig)
   select = st.multiselect("Select one country:", [item[0] for item in countries_and_codes])
   if select:
     try:
@@ -79,10 +141,6 @@ def main():
       cases = country[0]["timelines"]["confirmed"]["timeline"]
       #print ('CASES', cases, 'ITEMS', cases.items())
       deaths =  country[0]["timelines"]["deaths"]["timeline"]
-      # create dataframes for cases
-      st.sidebar.subheader('Sub-notification')
-      st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
-      sub_factor = st.sidebar.number_input("Sub-notification in %", min_value=1)
       # create dataframes for cases
       cases_df = pd.DataFrame(list(cases.items()),
                    columns=['day', 'cases'])
@@ -109,6 +167,10 @@ def main():
       st.header('Timeline of cases and deaths')
       st.write('Day 01 of pandemic outbreak is January 1st, 2020.')
       st.write('(*For scenarios with sub-notification, click on side bar*)')
+       # create sidebar for sub-notification scenarios
+      st.sidebar.subheader('Sub-notification')
+      st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
+      sub_factor = st.sidebar.number_input("Sub-notification in %", min_value=1)
       # make numerical dataframe optional
       if st.checkbox('Show numeric data'):
         st.dataframe(df.style.highlight_max(axis=0))
@@ -282,12 +344,12 @@ def main():
       # Final considerations
       st.header('Notes')
       st.subheader('*Data Sources*')
-      st.markdown('All data is operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE) and collected from the [Worldwide Data repository.] (https://coronavirus.jhu.edu/map.html)')
+      st.markdown('Data used for prediction is operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE) and collected from the [Worldwide Data repository.] (https://coronavirus.jhu.edu/map.html)')
       st.subheader('*Testing*')
       st.write('Predictions that apply sub-notification of cases should be interpreted with *extreme caution*. Give preference to official data. Unless sub-notification is due to a State policy, we believe that official data is still useful for projections into the future.')
       st.markdown('For a take on the limitation of models due to lack of testing, please refer to this article by Nate Silver: [Coronavirus Case Counts Are Meaningless, Unless you know something about testing. And even then, it gets complicated.](https://fivethirtyeight.com/features/coronavirus-case-counts-are-meaningless/amp/?__twitter_impression=true)')
       st.subheader('*Model*')
-      st.write('There is a common aphorism in statistics: "**All models are wrong, but some are useful**."')   
+      st.write('There is a common aphorism in statistics: "*All models are wrong, but some are useful*."')   
       st.write('Although the logistic model seems to be the most reasonable one, the shape of the curve will probably change due to exogenous effects like new infection hotspots, government actions to bind the infection and so on.')
       st.markdown('>*Imperfect data isn’t necessarily a problem if we know how it’s imperfect, and can adjust accordingly. For example, suppose your watch is an hour slow. If you aren’t aware of this, it will probably cause you problems. But if you know about the delay, you can make a mental adjustment and still be on time. Likewise, if we know the delay in reporting during an outbreak, we can adjust how we interpret the outbreak curve. Such ‘nowcasting’, which aims to understand the situation as it currently stands, is often necessary before forecasts can be made*. -Adam Kucharski, [The Rules of Contagion.](https://www.amazon.com.br/Rules-Contagion-Outbreaks-Infectious-Diseases-ebook/dp/B07JLSHT7M)')
       st.write('**Predictions of this model will start to become more useful only within a few weeks, reasonably after the infection peak.**')
