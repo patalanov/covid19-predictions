@@ -19,52 +19,8 @@ from scipy.optimize import fsolve
 # app
 import streamlit as st
 
-
-@st.cache
-def get_codes():
-  df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
-
-  def look(x):
-      try:
-          return pycountry.countries.search_fuzzy(x)[0].alpha_3
-      except:
-          return x
-
-  countries = list(df)[2:]
-
-  world_cases = df['World'].iloc[-1]
-
-  cases=[]
-  for item in df:
-    if item in countries:
-      # most recent is the last
-      n = df[item].iloc[-1]
-      cases.append(n)
-
-  iso3_codes = [look(c) for c in countries]
-
-  return (countries, iso3_codes, cases, world_cases)
-
-
-@st.cache
-def get_data(countries_and_codes, select):
-  # instantiate wrapper to data api
-  covid19 = COVID19Py.COVID19()
-  # get data from Hopkins University
-  country_data = covid19.getLocationByCountryCode([item[1] for item in countries_and_codes if item[0] == select[0]], timelines=True)
-  return country_data
-
-def main():
-  # Add a title
-  st.title('COVID19 predictions')
-  # get preliminary data
-  countries, codes, cases, world_cases = get_codes()
-  st.header('Cases around the world:')
-  st.markdown(world_cases)
-  # Add some text
-  st.header('Check the pandemic evolution in your country.')
-  # all countries
-  countries_and_codes = [
+# all countries, and alpha 2 code for api query (global locations need alpha 3)
+countries_and_codes = [
    ['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Andorra', 'AD'], ['Angola', 'AO'], 
    ['Antigua and Barbuda', 'AG'], ['Argentina', 'AR'], ['Armenia', 'AM'], ['Australia', 'AU'], ['Austria', 'AT'], 
    ['Azerbaijan', 'AZ'], ['Bahamas', 'BS'], ['Bahrain', 'BH'], ['Bangladesh', 'BD'], ['Barbados', 'BB'], 
@@ -99,9 +55,52 @@ def main():
    ['Trinidad and Tobago', 'TT'], ['Tunisia', 'TN'], ['Turkey', 'TR'], ['US', 'US'], ['Uganda', 'UG'], ['Ukraine', 'UA'], 
    ['United Arab Emirates', 'AE'], ['United Kingdom', 'GB'], ['Uruguay', 'UY'], ['Uzbekistan', 'UZ'], ['Venezuela', 'VE'], 
    ['Vietnam', 'VN'], ['West Bank and Gaza', 'PS'], ['Zambia', 'ZM'], ['Zimbabwe', 'ZW']]
-  # pick your country
-  #df2 = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/2014_world_gdp_with_codes.csv')
 
+
+@st.cache
+def get_codes():
+  # global, generic data
+  df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
+  # lookup function
+  def look(x):
+      try:
+          return pycountry.countries.search_fuzzy(x)[0].alpha_3
+      except:
+          return x
+  # get countries
+  countries = list(df)[2:]
+  # last entry
+  world_cases = df['World'].iloc[-1]
+  #get cases
+  cases=[]
+  for item in df:
+    if item in countries:
+      # most recent is the last
+      n = df[item].iloc[-1]
+      cases.append(n)
+  # get alpha 3 code for map locations
+  iso3_codes = [look(c) for c in countries]
+  return (countries, iso3_codes, cases, world_cases)
+
+
+@st.cache
+def get_data(countries_and_codes, select):
+  # instantiate wrapper to data api
+  covid19 = COVID19Py.COVID19()
+  # get data from Hopkins University
+  country_data = covid19.getLocationByCountryCode([item[1] for item in countries_and_codes if item[0] == select[0]], timelines=True)
+  return country_data
+
+
+# APP
+def main():
+  # Add a title
+  st.title('COVID19 predictions')
+  # get preliminary data
+  countries, codes, cases, world_cases = get_codes()
+  st.header('Cases around the world:')
+  st.markdown(world_cases)
+  # map
   data = [go.Choropleth(
       locations = codes,
       z = cases,
@@ -150,7 +149,11 @@ def main():
 
   fig = go.Figure(data = data, layout = layout)
   #fig.show()
+  # show global cases on a map
   st.plotly_chart(fig)
+  # Start querying for prediction
+  st.header('Check the pandemic evolution in your country.')
+  # pick your country
   select = st.multiselect("Select one country:", [item[0] for item in countries_and_codes])
   if select:
     try:
