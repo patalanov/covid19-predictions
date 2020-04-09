@@ -8,7 +8,7 @@ import itertools
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
+import plotly.graph_objs as go
 import pycountry
 from PIL import Image
 from IPython.display import HTML as html_print
