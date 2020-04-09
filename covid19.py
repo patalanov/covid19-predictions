@@ -57,6 +57,8 @@ def get_data(countries_and_codes, select):
 def main():
   # Add a title
   st.title('COVID19 predictions')
+  # get preliminary data
+  countries, codes, cases, world_cases = get_codes()
   # Add some text
   st.header('Check the pandemic evolution in your country.')
   # all countries
