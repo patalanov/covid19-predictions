@@ -3,41 +3,21 @@ A tool for predicting the evolution of Covid19 in your country.
 
 ![10](https://user-images.githubusercontent.com/6799245/78916853-77982780-7a64-11ea-9d7e-ebd73eec0ec4.png)
 
-# **Choose a country.**
-
 ![00](https://user-images.githubusercontent.com/6799245/78595007-a2456e80-781f-11ea-9020-001640516b44.png)
-
-# The app displays:
-
-## **A timeline of cases and fatalities.**
 
 ![01](https://user-images.githubusercontent.com/6799245/78595118-d15be000-781f-11ea-92bb-5a36a4b2753a.png)
 
-## **The data for the past 7 days.**
-
 ![02](https://user-images.githubusercontent.com/6799245/78592866-1d0c8a80-781c-11ea-8c57-cff83d2838d5.png)
-
-## **The Daily increase in cases.**
 
 ![03](https://user-images.githubusercontent.com/6799245/78592869-1da52100-781c-11ea-89de-ad86f5738a07.png)
 
-## **Some theoretical explanation about the model used.**
-
 ![04](https://user-images.githubusercontent.com/6799245/78592872-1e3db780-781c-11ea-8b11-e01a79acb2aa.png)
-
-## **The prediction mf maximum cases.**
 
 ![05](https://user-images.githubusercontent.com/6799245/78592874-1ed64e00-781c-11ea-87e5-8a203f67dde4.png)
 
-## **The infection stabilization number and date.**
-
 ![06](https://user-images.githubusercontent.com/6799245/78592880-1f6ee480-781c-11ea-8377-47394e66d6cc.png)
 
-## **The prediction of fatalities.**
-
 ![07](https://user-images.githubusercontent.com/6799245/78592882-1f6ee480-781c-11ea-84c4-724de6e76b43.png)
-
-## **The stabilization of deaths and its date.**
 
 ![08](https://user-images.githubusercontent.com/6799245/78592883-20077b00-781c-11ea-8c7f-8053783387d2.png)
 
