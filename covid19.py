@@ -159,12 +159,12 @@ def main():
     try:
       # query selected country
       country = get_data(countries_and_codes, select)
-      # the subnotification factor where official data == 100% accurate
-      sub_factor = 1
+      # start considering notification (official data) as 100% accurate
+      notification_percentual = 100
       # create sidebar for sub-notification scenarios
       st.sidebar.subheader('Sub-notification')
-      st.sidebar.markdown('You can test predictions adding up some percentage of the total cases, which are not being officially reported. Those numbers depend on the capacity of the health service testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of sub-notification percentage, give a try and enter it in the widget below.')
-      sub_factor = st.sidebar.number_input("Sub-notification = x (multiply by)", min_value=1)
+      st.sidebar.markdown('You can test predictions assuming which percentage of the actual number of cases are being officially reported. For example, if you assume only 50 % are being reported, enter 50 bellow. COVID19 notification depend on the capacity of the health service for testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of notification percentage, give a try. Write the number and hit enter it in the widget below.')
+      sub_factor = st.sidebar.number_input("Notification in %", min_value=1)
       # filter target data
       cases = country[0]["timelines"]["confirmed"]["timeline"]
       #print ('CASES', cases, 'ITEMS', cases.items())
@@ -173,8 +173,8 @@ def main():
       cases_df = pd.DataFrame(list(cases.items()),
                    columns=['day', 'cases'])
       # apply subnotification percentage
-      # if none was entered, it is == 1
-      cases_df.cases*=sub_factor
+      # if none was entered, it is == 100
+      cases_df.cases = cases_df.cases*100/notification_percentual
       # create dataframes for deaths
       deaths_df = pd.DataFrame(list(deaths.items()),
                    columns=['day', 'deaths'])
@@ -324,10 +324,10 @@ def main():
       # A bit more theory 
       st.header('Prediction of maximum cases')
 
-      if sub_factor == 1:
-        st.markdown("With sub-notification of 0%.")
+      if notification_percentual == 100:
+        st.markdown("With sub-notification of 0% ")
       else:
-        st.markdown("With sub-notification adding up to **" + str(int(round(sub_factor))) + "times of actual cases.")
+        st.markdown("With sub-notification of " + str(int(round(100 - notification_percentual))) + " %.")
 
       st.write('At high time values, the number of infected people gets closer and closer to *c* and that’s the point at which we can say that the infection has ended. This function has also an inflection point at *b*, that is the point at which the first derivative starts to decrease (i.e. the peak after which the infection starts to become less aggressive and decreases).')
       # plot
