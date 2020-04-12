@@ -21,6 +21,7 @@ from scipy.optimize import fsolve
 # app
 import streamlit as st
 
+
 # all countries, and alpha 2 code for api query (global locations need alpha 3)
 countries_and_codes = [
    ['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Andorra', 'AD'], ['Angola', 'AO'], 
@@ -273,7 +274,8 @@ def timeline_of_cases_and_deaths(country, notification_percentual):
   st.write('(*For scenarios with sub-notification, click on side bar*)')
   # make numerical dataframe optional
   if st.checkbox('Show numeric data'):
-    st.dataframe(df.style.highlight_max(axis=0))
+    cm = sns.light_palette("red", as_cmap=True)
+    st.dataframe(df.style.background_gradient(cmap=cm, axis=0))
   st.write('The data plots the following line chart for cases and deaths.')
   # show data on a line chart
   st.line_chart(df)
