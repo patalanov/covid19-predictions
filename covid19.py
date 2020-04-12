@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
+import seaborn as sns
 import pycountry
 from PIL import Image
 from IPython.display import HTML as html_print
@@ -59,16 +60,14 @@ countries_and_codes = [
 
 
 
-with st.spinner('Data is being downloaded...'):
-  time.sleep(3)
-
-
 # APP
 def main():
   # Add a title
   st.title('COVID19 predictions')
   # get preliminary data
-  countries, codes, cases, world_cases_now, evolution_of_cases_worldwide = get_codes()
+  with st.spinner('Global map is being updated...'):
+    time.sleep(3)
+    countries, codes, cases, world_cases_now, evolution_of_cases_worldwide = get_codes()
   st.header('Cases around the world:')
   st.markdown(world_cases_now)
   # show map
@@ -84,7 +83,9 @@ def main():
   if select:
     try:
       # query selected country
-      country = get_data(countries_and_codes, select)
+      with st.spinner('Data is being prepared...'):
+        time.sleep(2)
+        country = get_data(countries_and_codes, select)
       # notification factor where official data == 100% accurate
       notification_percentual = 100
       # create sidebar for sub-notification scenarios
@@ -146,7 +147,7 @@ def main():
 
 
 # - world data - alpha3 code for countries 
-@st.cache
+@st.cache(suppress_st_warning=True)
 def get_codes():
   # global, generic data
   df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
@@ -176,7 +177,7 @@ def get_codes():
 
 
 # - single country data - use alpha2 code for countries 
-@st.cache
+@st.cache(suppress_st_warning=True)
 def get_data(countries_and_codes, select):
   # instantiate wrapper to data api
   covid19 = COVID19Py.COVID19()
@@ -192,12 +193,12 @@ def plot_world_data(countries, codes, cases, world_cases_now, evolution_of_cases
       z = cases,
       text = countries,
       colorscale = [
-          [0, "rgb(5, 10, 172)"],
-          [0.35, "rgb(40, 60, 190)"],
-          [0.5, "rgb(70, 100, 245)"],
-          [0.6, "rgb(90, 120, 245)"],
-          [0.7, "rgb(106, 137, 247)"],
-          [1, "rgb(220, 220, 220)"]
+        [0, "rgb(103,0,13)"],
+        [0.35, "rgb(165,15,21)"],
+        [0.5, "rgb(203,24,29)"],
+        [0.6, "rgb(239,59,44)"],
+        [0.7, "rgb(251,106,74)"],
+        [1, "rgb(254,229,217)"]
       ],
       autocolorscale = False,
       reversescale = True,
@@ -289,7 +290,8 @@ def plot_daily_increase(select, first_day, df):
   # show last 7 days in case growth
   st.header('Official data for the past 7 days')
   st.write('In this table, we show the growth of infection on a daily basis, which is crucial to understand the speed of infection. Top values are highlighted.')
-  st.dataframe(dfG[-7:].style.highlight_max(axis=0))
+  cm = sns.light_palette("red", as_cmap=True)
+  st.table(dfG[-7:].style.background_gradient(cmap=cm,axis=0))
   # add cases growth
   dfg2 = dfG[-14:]
   x = dfg2['day'].tolist()
