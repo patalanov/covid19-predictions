@@ -89,7 +89,7 @@ def main():
       notification_percentual = 100
       # create sidebar for sub-notification scenarios
       st.sidebar.subheader('Sub-notification')
-      st.sidebar.markdown('You can test predictions assuming which percentage of the actual number of cases are officially reported. For example, if you assume only 50 % are being reported, enter 50 bellow. COVID19 notification depend on the capacity of the health service for testing the population, and may vary greatly from country to country, and even from region to region within a country. If you have some estimation of notification percentage, nudge the slider bellow.')
+      st.sidebar.info('You can test predictions assuming which percentage of the official number of cases are not being reported. For example, if only 50% of cases are being reported, move the slider to the middle. Notification depends on the capacity health services have for testing the population, and may vary greatly from country to country, and even from region to region within a country.')
       notification_percentual = st.sidebar.slider(
         "Notification in %", 
         min_value=0,
