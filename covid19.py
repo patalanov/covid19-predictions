@@ -78,7 +78,7 @@ def main():
   # show global evolution in a line chart
   st.line_chart(evolution_of_cases_worldwide)
   # Start querying for prediction
-  st.header('Predict the evolution in your country.')
+  st.header('Predict the Covid19 evolution in your country.')
   # pick your country
   select = st.multiselect("Select one country:", [item[0] for item in countries_and_codes])
   if select:

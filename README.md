@@ -1,29 +1,29 @@
 # Covid19-predictions
 A tool for predicting the evolution of Covid19 in your country.
 
-![10](https://user-images.githubusercontent.com/6799245/78916853-77982780-7a64-11ea-9d7e-ebd73eec0ec4.png)
+![00](https://user-images.githubusercontent.com/6799245/79267520-ae5cac00-7e6f-11ea-8f25-baab3c671a54.png)
 
-![00](https://user-images.githubusercontent.com/6799245/78595007-a2456e80-781f-11ea-9020-001640516b44.png)
+![01](https://user-images.githubusercontent.com/6799245/79267670-f11e8400-7e6f-11ea-8d01-428079bf0a94.png)
 
-![01](https://user-images.githubusercontent.com/6799245/78595118-d15be000-781f-11ea-92bb-5a36a4b2753a.png)
+![02](https://user-images.githubusercontent.com/6799245/78595118-d15be000-781f-11ea-92bb-5a36a4b2753a.png)
 
-![02](https://user-images.githubusercontent.com/6799245/78592866-1d0c8a80-781c-11ea-8c57-cff83d2838d5.png)
+![03](https://user-images.githubusercontent.com/6799245/79267891-422e7800-7e70-11ea-8181-976d9e3219f3.png)
 
-![03](https://user-images.githubusercontent.com/6799245/78592869-1da52100-781c-11ea-89de-ad86f5738a07.png)
+![04](https://user-images.githubusercontent.com/6799245/78592869-1da52100-781c-11ea-89de-ad86f5738a07.png)
 
-![04](https://user-images.githubusercontent.com/6799245/78592872-1e3db780-781c-11ea-8b11-e01a79acb2aa.png)
+![05](https://user-images.githubusercontent.com/6799245/78592872-1e3db780-781c-11ea-8b11-e01a79acb2aa.png)
 
-![05](https://user-images.githubusercontent.com/6799245/78592874-1ed64e00-781c-11ea-87e5-8a203f67dde4.png)
+![06](https://user-images.githubusercontent.com/6799245/78592874-1ed64e00-781c-11ea-87e5-8a203f67dde4.png)
 
-![06](https://user-images.githubusercontent.com/6799245/78592880-1f6ee480-781c-11ea-8377-47394e66d6cc.png)
+![07](https://user-images.githubusercontent.com/6799245/78592880-1f6ee480-781c-11ea-8377-47394e66d6cc.png)
 
-![07](https://user-images.githubusercontent.com/6799245/78592882-1f6ee480-781c-11ea-84c4-724de6e76b43.png)
+![08](https://user-images.githubusercontent.com/6799245/78592882-1f6ee480-781c-11ea-84c4-724de6e76b43.png)
 
-![08](https://user-images.githubusercontent.com/6799245/78592883-20077b00-781c-11ea-8c7f-8053783387d2.png)
+![09](https://user-images.githubusercontent.com/6799245/78592883-20077b00-781c-11ea-8c7f-8053783387d2.png)
 
 ## **You can also make predictions adding some percentual of sub-notification of cases.**
 
-![09](https://user-images.githubusercontent.com/6799245/78738782-1455aa80-7929-11ea-9f37-120c947e4ccb.png)
+![10](https://user-images.githubusercontent.com/6799245/79268106-9afe1080-7e70-11ea-9951-6b065dfd2a22.png)
 
 ## Notes
 Data Sources
