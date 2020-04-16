@@ -92,12 +92,12 @@ def main():
     try:
       # query selected country
       with st.spinner('Data is being prepared...'):
-        time.sleep(2)
+        time.sleep(3)
         country = get_data(countries_and_codes, select)
       # notification factor where official data == 100% accurate
       notification_percentual = 100
       # create sidebar for sub-notification scenarios
-      st.sidebar.subheader('Sub-notification')
+      st.sidebar.title("Sub-notification")
       st.sidebar.info('You can test predictions assuming which percentage of the official number of cases are not being reported. For example, if only 50% of cases are being reported, move the slider to the middle. Notification depends on the capacity health services have for testing the population, and may vary greatly from country to country, and even from region to region within a country.')
       notification_percentual = st.sidebar.slider(
         "Notification in %", 
@@ -164,7 +164,6 @@ def get_codes():
           return x
   # get countries
   countries = list(df)[2:]
-  print (df)
   # last entry
   world_cases = df['World'].iloc[-1]
   evolution_of_cases_worldwide = df['World']
@@ -180,6 +179,7 @@ def get_codes():
   return (countries, iso3_codes, cases, world_cases, evolution_of_cases_worldwide)
 
 
+
 @st.cache(suppress_st_warning=True)
 def get_top_10():
   df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
@@ -193,7 +193,7 @@ def get_top_10():
   df = pd.read_csv(url, index_col=0, parse_dates=[0])
   
   top10_with_datetimes = df[df.iloc[-1, 1:].astype(float).nlargest(10).index]
-
+=
   return (top10_countries, top10_columns, top10_with_datetimes)
 
 
@@ -215,12 +215,12 @@ def plot_world_data(countries, codes, cases, world_cases_now, evolution_of_cases
       z = cases,
       text = countries,
       colorscale = [
-        [0, "rgb(103,0,13)"],
-        [0.35, "rgb(165,15,21)"],
-        [0.5, "rgb(203,24,29)"],
-        [0.6, "rgb(239,59,44)"],
-        [0.7, "rgb(251,106,74)"],
-        [1, "rgb(254,229,217)"]
+          [0, "rgb(103,0,13)"],
+          [0.35, "rgb(165,15,21)"],
+          [0.5, "rgb(203,24,29)"],
+          [0.6, "rgb(239,59,44)"],
+          [0.7, "rgb(251,106,74)"],
+          [1, "rgb(254,229,217)"]
       ],
       autocolorscale = False,
       reversescale = True,
@@ -262,6 +262,7 @@ def plot_world_data(countries, codes, cases, world_cases_now, evolution_of_cases
   st.plotly_chart(fig)
 
 
+# here we get the main dataframe
 def timeline_of_cases_and_deaths(country, notification_percentual):
   # filter target data
   cases = country[0]["timelines"]["confirmed"]["timeline"]
@@ -314,7 +315,7 @@ def plot_daily_increase(select, first_day, df):
   st.header('Official data for the past 7 days')
   st.write('In this table, we show the growth of infection on a daily basis, which is crucial to understand the speed of infection. Top values are highlighted.')
   cm = sns.light_palette("red", as_cmap=True)
-  st.table(dfG[-7:].style.background_gradient(cmap=cm,axis=0))
+  st.table(dfG[-7:].style.background_gradient(cmap=cm, axis=0))
   # add cases growth
   dfg2 = dfG[-14:]
   x = dfg2['day'].tolist()
@@ -438,6 +439,7 @@ def prediction_of_maximum_cases(df, notification_percentual):
   # PREDICTION 1
   st.header('Infection stabilization')
   st.markdown("Predictions as of today, the total infection should stabilize at **" + str(int(round(pred))) + "** cases.")
+  return int(round(pred))
 
 
 def prediction_of_deaths(df, notification_percentual, pred):
@@ -446,7 +448,7 @@ def prediction_of_deaths(df, notification_percentual, pred):
     st.write('With the present notification value of ' + str(notification_percentual) + "%, we apply the global mortality rate of 3.5% of total cases.")
     st.markdown('[COVID-19 Global Mortality Rate](https://www.worldometers.info/coronavirus/coronavirus-death-rate/)')
     prediction_of_deaths_3_100 = pred*3.5/100
-    st.markdown("- Considering maximum death rate being 3.5% of the total number of cases, we should expect ** " + str(int(round(prediction_of_deaths_3_100))) + "** deaths")
+    st.markdown("- Considering maximum death rate being around 3.5% of the total number of cases, we should expect ** " + str(int(round(prediction_of_deaths_3_100))) + "** deaths")
   else:
     plt.figure(figsize=(12, 8))
     add_real_data(df[:-2], "2 days ago", column = 'deaths')
