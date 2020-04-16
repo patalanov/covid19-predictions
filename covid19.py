@@ -77,6 +77,12 @@ def main():
   st.header('The rate of global infection')
   # show global evolution in a line chart
   st.line_chart(evolution_of_cases_worldwide)
+  # top countries
+  top10_countries, top10_columns, top10_with_datetimes = get_top_10()
+  # show  evolution for top x countries in number of cases
+  st.header('Top 15 countries in number of cases')
+  # chart it
+  st.line_chart(top10_columns)
   # Start querying for prediction
   st.header('Predict the Covid19 evolution in your country.')
   # pick your country
@@ -174,6 +180,23 @@ def get_codes():
   # get alpha 3 code for map locations
   iso3_codes = [look(c) for c in countries]
   return (countries, iso3_codes, cases, world_cases, evolution_of_cases_worldwide)
+
+
+@st.cache(suppress_st_warning=True)
+def get_top_10():
+  df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
+  
+  top10 = df.iloc[:, 2:].iloc[-1].nlargest(15)
+  top10_countries = df.iloc[-1, 2:].astype(float).nlargest(15)
+  top10_columns = df[df.iloc[-1, 2:].astype(float).nlargest(15).index]
+  # for datetime
+  url = 'https://covid.ourworldindata.org/data/ecdc/total_cases.csv'
+  
+  df = pd.read_csv(url, index_col=0, parse_dates=[0])
+  
+  top10_with_datetimes = df[df.iloc[-1, 1:].astype(float).nlargest(15).index]
+
+  return (top10_countries, top10_columns, top10_with_datetimes)
 
 
 
