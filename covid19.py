@@ -444,9 +444,9 @@ def prediction_of_deaths(df, notification_percentual, pred):
   # With subotification, deaths prediction must be within the range of 0.5% and 3.0% of total cases
   if notification_percentual < 100:
     st.write('With the present notification value of ' + str(notification_percentual) + "%, we apply the global mortality rate of 3.5% of total cases.")
-    prediction_of_deaths_3_100 = pred*3.5/100
-    st.markdown("- Considering maximum death rate being 3% of the total number of cases, we should expect ** " + str(int(round(prediction_of_deaths_3_100))) + "** deaths")
     st.markdown('[COVID-19 Global Mortality Rate](https://www.worldometers.info/coronavirus/coronavirus-death-rate/)')
+    prediction_of_deaths_3_100 = pred*3.5/100
+    st.markdown("- Considering maximum death rate being 3.5% of the total number of cases, we should expect ** " + str(int(round(prediction_of_deaths_3_100))) + "** deaths")
   else:
     plt.figure(figsize=(12, 8))
     add_real_data(df[:-2], "2 days ago", column = 'deaths')
