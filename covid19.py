@@ -193,7 +193,6 @@ def get_top_10():
   df = pd.read_csv(url, index_col=0, parse_dates=[0])
   
   top10_with_datetimes = df[df.iloc[-1, 1:].astype(float).nlargest(10).index]
-=
   return (top10_countries, top10_columns, top10_with_datetimes)
 
 
