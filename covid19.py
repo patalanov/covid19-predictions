@@ -21,7 +21,6 @@ from scipy.optimize import fsolve
 # app
 import streamlit as st
 
-
 # all countries, and alpha 2 code for api query (global locations need alpha 3)
 countries_and_codes = [
    ['Afghanistan', 'AF'], ['Albania', 'AL'], ['Algeria', 'DZ'], ['Andorra', 'AD'], ['Angola', 'AO'], 
@@ -58,8 +57,6 @@ countries_and_codes = [
    ['Trinidad and Tobago', 'TT'], ['Tunisia', 'TN'], ['Turkey', 'TR'], ['US', 'US'], ['Uganda', 'UG'], ['Ukraine', 'UA'], 
    ['United Arab Emirates', 'AE'], ['United Kingdom', 'GB'], ['Uruguay', 'UY'], ['Uzbekistan', 'UZ'], ['Venezuela', 'VE'], 
    ['Vietnam', 'VN'], ['West Bank and Gaza', 'PS'], ['Zambia', 'ZM'], ['Zimbabwe', 'ZW']]
-
-
 
 # APP
 def main():
@@ -112,7 +109,6 @@ def main():
       first_day, df = timeline_of_cases_and_deaths(country, notification_percentual)
       # plot  daily increase of cases
       plot_daily_increase(select, first_day, df)
-
       # A brief theoretical explanation
       st.header('Predicting the outcome')
       st.subheader('*The Logistic model*')
@@ -126,12 +122,10 @@ def main():
       st.write('- *b* is the day with the maximum infections occurred')
       st.write('- *c* is the total number of recorded infected people at the infection’s end')
       st.write('At high time values, the number of infected people gets closer and closer to c and that’s the point at which we can say that the infection has ended. This function has also an inflection point at b, that is the point at which the first derivative starts to decrease (i.e. the peak after which the infection starts to become less aggressive and decreases)')
-
       # Data & projections for cases, for today and the former 2 days
-      prediction_of_maximum_cases(df, notification_percentual)
+      pred = prediction_of_maximum_cases(df, notification_percentual)
       # Data & projections for deaths, for today and the former 2 days
-      prediction_of_deaths(df)
-
+      prediction_of_deaths(df, notification_percentual, pred)
       # Final considerations
       st.header('Notes')
       st.subheader('*Data Sources*')
@@ -446,30 +440,36 @@ def prediction_of_maximum_cases(df, notification_percentual):
   st.markdown("Predictions as of today, the total infection should stabilize at **" + str(int(round(pred))) + "** cases.")
 
 
-def prediction_of_deaths(df):
-  # Plot
-  plt.figure(figsize=(12, 8))
-  add_real_data(df[:-2], "2 days ago", column = 'deaths')
-  add_real_data(df[-2:-1], "yesterday", column = 'deaths')
-  add_real_data(df[-1:], "today", column = 'deaths')
-  add_logistic_curve(df[:-2], "2 days ago",column='deaths', dashes=[8, 8])
-  add_logistic_curve(df[:-1], "yesterday",column='deaths', dashes=[4, 4])
-  y_max = add_logistic_curve(df, "today", column='deaths')
-  label_and_show_plot(plt, "Best logistic fit with the freshest data", y_max)
+def prediction_of_deaths(df, notification_percentual, pred):
+  # With subotification, deaths prediction must be within the range of 0.5% and 3.0% of total cases
+  if notification_percentual < 100:
+    st.write('With the present notification value of ' + str(notification_percentual) + "%, we apply the global mortality rate of 3.5% of total cases.")
+    prediction_of_deaths_3_100 = pred*3.5/100
+    st.markdown("- Considering maximum death rate being 3% of the total number of cases, we should expect ** " + str(int(round(prediction_of_deaths_3_100))) + "** deaths")
+    st.markdown('[COVID-19 Global Mortality Rate](https://www.worldometers.info/coronavirus/coronavirus-death-rate/)')
+  else:
+    plt.figure(figsize=(12, 8))
+    add_real_data(df[:-2], "2 days ago", column = 'deaths')
+    add_real_data(df[-2:-1], "yesterday", column = 'deaths')
+    add_real_data(df[-1:], "today", column = 'deaths')
+    add_logistic_curve(df[:-2], "2 days ago",column='deaths', dashes=[8, 8])
+    add_logistic_curve(df[:-1], "yesterday",column='deaths', dashes=[4, 4])
+    y_max = add_logistic_curve(df, "today", column='deaths')
+    label_and_show_plot(plt, "Best logistic fit with the freshest data", y_max)
 
-  st.header('Prediction of deaths')
-  st.pyplot(clear_figure=False)
+    st.header('Prediction of deaths')
+    st.pyplot(clear_figure=False)
 
-  st.subheader('Predictions as of *today*, *yesterday* and *2 days ago*')
+    st.subheader('Predictions as of *today*, *yesterday* and *2 days ago*')
 
-  print_prediction(df[:-2], "2 days ago", 'deaths')
-  print_prediction(df[:-1], "yesterday", 'deaths')
-  pred = print_prediction(df, "today", 'deaths')
-  print()
-  html_print("As of today, the total deaths should stabilize at <b>" + str(int(round(pred))) + "</b>")
-  # PREDICTION 2
-  st.header('Deaths stabilization')
-  st.markdown("As of today, the total number of deaths should stabilize at **" + str(int(round(pred))) + "** cases.")
+    print_prediction(df[:-2], "2 days ago", 'deaths')
+    print_prediction(df[:-1], "yesterday", 'deaths')
+    pred = print_prediction(df, "today", 'deaths')
+    print()
+    html_print("As of today, the total deaths should stabilize at <b>" + str(int(round(pred))) + "</b>")
+    # PREDICTION 2
+    st.header('Deaths stabilization')
+    st.markdown("As of today, the total number of deaths should stabilize at **" + str(int(round(pred))) + "** cases.")
 
 
 if __name__ == '__main__':
