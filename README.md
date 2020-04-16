@@ -5,6 +5,8 @@ A tool for predicting the evolution of Covid19 in your country.
 
 ![01](https://user-images.githubusercontent.com/6799245/79267670-f11e8400-7e6f-11ea-8d01-428079bf0a94.png)
 
+![11](https://user-images.githubusercontent.com/6799245/79494057-c1e74e80-7ff8-11ea-9089-754ac2b46f8c.png)
+
 ![02](https://user-images.githubusercontent.com/6799245/78595118-d15be000-781f-11ea-92bb-5a36a4b2753a.png)
 
 ![03](https://user-images.githubusercontent.com/6799245/79267891-422e7800-7e70-11ea-8181-976d9e3219f3.png)
