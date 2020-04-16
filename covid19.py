@@ -81,6 +81,10 @@ def main():
   top10_countries, top10_columns, top10_with_datetimes = get_top_10()
   # show  evolution for top x countries in number of cases
   st.header('Top 15 countries in number of cases')
+  # style it
+  cm = sns.light_palette("red", as_cmap=True)
+  # show table
+  st.table(top10_columns[-1:].style.background_gradient(cmap=cm, axis=0))
   # chart it
   st.line_chart(top10_columns)
   # Start querying for prediction
