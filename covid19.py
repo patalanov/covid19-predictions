@@ -190,15 +190,15 @@ def get_codes():
 def get_top_10():
   df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
   
-  top10 = df.iloc[:, 2:].iloc[-1].nlargest(15)
-  top10_countries = df.iloc[-1, 2:].astype(float).nlargest(15)
-  top10_columns = df[df.iloc[-1, 2:].astype(float).nlargest(15).index]
+  top10 = df.iloc[:, 2:].iloc[-1].nlargest(10)
+  top10_countries = df.iloc[-1, 2:].astype(float).nlargest(10)
+  top10_columns = df[df.iloc[-1, 2:].astype(float).nlargest(10).index]
   # for datetime
   url = 'https://covid.ourworldindata.org/data/ecdc/total_cases.csv'
   
   df = pd.read_csv(url, index_col=0, parse_dates=[0])
   
-  top10_with_datetimes = df[df.iloc[-1, 1:].astype(float).nlargest(15).index]
+  top10_with_datetimes = df[df.iloc[-1, 1:].astype(float).nlargest(10).index]
 
   return (top10_countries, top10_columns, top10_with_datetimes)
 
