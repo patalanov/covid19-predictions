@@ -9,9 +9,9 @@ import time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.pylab as p
 import plotly.graph_objs as go
-from matplotlib import pylab
-from pylab import *
+import pylab
 import seaborn as sns
 import pycountry
 from PIL import Image
@@ -327,7 +327,7 @@ def plot_logarithmic(country, notification_percentual):
 
   line, = ax.plot(cases_df.cases, color='blue', lw=1)
   ax.set_yscale('log')
-  pylab.show()
+  p.show()
   st.write('**Logarithmic scale**')
   st.write('This scale makes it possible to fit a large or widespread set of results onto a graph that might otherwise not fit in a linear way. A logarithmic graph can also help make it clear if the apparent evening-out of the curve started to change. While a linear curve would keep on pushing ever higher regardless, the logarithmic graph would highlight any substantial changes to the trend – whether upward or downward. It’s an approach that is often preferred when there are huge numbers involved and a linear scale would just produce a dramatic-looking exponential curve.')
   st.pyplot()
