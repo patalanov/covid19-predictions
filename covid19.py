@@ -10,6 +10,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
+from matplotlib import pylab
+from pylab import *
 import seaborn as sns
 import pycountry
 from PIL import Image
