@@ -61,7 +61,7 @@ countries_and_codes = [
 # APP
 def main():
   # Add a title
-  st.title('COVID19 predictions')
+  st.title('COVID-19 predictions')
   # get preliminary data
   with st.spinner('Global map is being updated...'):
     time.sleep(3)
@@ -107,6 +107,8 @@ def main():
         value=100)
       #show timeline
       first_day, df = timeline_of_cases_and_deaths(country, notification_percentual)
+      # show also the data using a logarithic scale
+      plot_logarithmic(country, notification_percentual)
       # plot  daily increase of cases
       plot_daily_increase(select, first_day, df)
       # A brief theoretical explanation
@@ -301,6 +303,32 @@ def timeline_of_cases_and_deaths(country, notification_percentual):
   # show data on a line chart
   st.line_chart(df)
   return first_day, df
+
+
+def plot_logarithmic(country, notification_percentual):
+  plt.rcParams["font.family"] = "Times New Roman"
+  plt.rcParams["font.size"] = "8"
+  plt.rcParams['axes.grid'] = True
+  # filter target data
+  cases = country[0]["timelines"]["confirmed"]["timeline"]
+  #print ('CASES', cases, 'ITEMS', cases.items())
+  deaths =  country[0]["timelines"]["deaths"]["timeline"]
+  # create dataframes for cases
+  cases_df = pd.DataFrame(list(cases.items()),
+               columns=['day', 'cases'])
+  # apply subnotification percentage
+  # if none was entered, it is == 1
+  cases_df.cases = cases_df.cases*100/notification_percentual
+  #a = [pow(10, i) for i in range(10)]
+  fig = plt.figure()
+  ax = fig.add_subplot(2, 1, 1)
+
+  line, = ax.plot(cases_df.cases, color='blue', lw=1)
+  ax.set_yscale('log')
+  pylab.show()
+  st.write('**Logarithmic scale**')
+  st.write('This scale makes it possible to fit a large or widespread set of results onto a graph that might otherwise not fit in a linear way. A logarithmic graph can also help make it clear if the apparent evening-out of the curve started to change. While a linear curve would keep on pushing ever higher regardless, the logarithmic graph would highlight any substantial changes to the trend – whether upward or downward. It’s an approach that is often preferred when there are huge numbers involved and a linear scale would just produce a dramatic-looking exponential curve.')
+  st.pyplot()
 
 
 def plot_daily_increase(select, first_day, df):
