@@ -63,7 +63,7 @@ countries_and_codes = [
 # APP
 def main():
   # Add a title
-  st.title('COVID-19 predictions')
+  st.title('COVID19 predictions')
   # get preliminary data
   with st.spinner('Global map is being updated...'):
     time.sleep(3)
@@ -74,8 +74,11 @@ def main():
   plot_world_data(countries, codes, cases, world_cases_now, evolution_of_cases_worldwide)
   # header
   st.header('The rate of global infection')
+  st.write('**Linear scale**')
   # show global evolution in a line chart
   st.line_chart(evolution_of_cases_worldwide)
+  # logarithmic
+  world_plot_logarithmic(evolution_of_cases_worldwide)
   # top countries
   top10_countries, top10_columns, top10_with_datetimes = get_top_10()
   # show  evolution for top x countries in number of cases
@@ -85,7 +88,10 @@ def main():
   # show table
   st.table(top10_with_datetimes[-1:].style.background_gradient(cmap=cm, axis=1))
   # chart it
+  st.write('**Linear scale**')
   st.line_chart(top10_columns)
+  # plot logarithimic
+  top10_plot_logarithmic(top10_columns)
   # Start querying for prediction
   st.header('Predict the spread of COVID-19')
   # pick your country
@@ -265,6 +271,62 @@ def plot_world_data(countries, codes, cases, world_cases_now, evolution_of_cases
   st.plotly_chart(fig)
 
 
+def world_plot_logarithmic(evolution_of_cases_worldwide):
+  plt.rcParams["font.family"] = "Times New Roman"
+  plt.rcParams["font.size"] = "8"
+  plt.rcParams['axes.grid'] = True
+  #a = [pow(10, i) for i in range(10)]
+  fig = plt.figure()
+  ax = fig.add_subplot(2, 1, 1)
+
+  line, = ax.plot(evolution_of_cases_worldwide, color='blue', lw=1)
+  ax.set_yscale('log')
+  pylab.show()
+  st.write('**Logarithmic scale**')
+  st.write('This scale makes it possible to fit a large or widespread set of results onto a graph that might otherwise not fit in a linear way. A logarithmic graph can also help make it clear if the apparent evening-out of the curve started to change. While a linear curve would keep on pushing ever higher regardless, the logarithmic graph would highlight any substantial changes to the trend – whether upward or downward. It’s an approach that is often preferred when there are huge numbers involved and a linear scale would just produce a dramatic-looking exponential curve.')
+  st.pyplot()
+
+
+def top10_plot_logarithmic(df):
+  df.fillna(0, inplace=True)
+
+  plt.rcParams["font.family"] = "Times New Roman"
+  plt.rcParams["font.size"] = "8"
+  plt.rcParams['axes.grid'] = True
+  #a = [pow(10, i) for i in range(10)]
+  
+  df.plot(logy=True)
+  st.write('**Logarithmic scale**')
+  st.pyplot()
+
+
+
+def plot_logarithmic(country, notification_percentual):
+  plt.rcParams["font.family"] = "Times New Roman"
+  plt.rcParams["font.size"] = "8"
+  plt.rcParams['axes.grid'] = True
+  # filter target data
+  cases = country[0]["timelines"]["confirmed"]["timeline"]
+  #print ('CASES', cases, 'ITEMS', cases.items())
+  deaths =  country[0]["timelines"]["deaths"]["timeline"]
+  # create dataframes for cases
+  cases_df = pd.DataFrame(list(cases.items()),
+               columns=['day', 'cases'])
+  # apply subnotification percentage
+  # if none was entered, it is == 1
+  cases_df.cases = cases_df.cases*100/notification_percentual
+  #a = [pow(10, i) for i in range(10)]
+  fig = plt.figure()
+  ax = fig.add_subplot(2, 1, 1)
+
+  line, = ax.plot(cases_df.cases, color='blue', lw=1)
+  ax.set_yscale('log')
+  pylab.show()
+  st.write('**Logarithmic scale**')
+  st.pyplot()
+
+
+
 # here we get the main dataframe
 def timeline_of_cases_and_deaths(country, notification_percentual):
   # filter target data
@@ -305,32 +367,6 @@ def timeline_of_cases_and_deaths(country, notification_percentual):
   # show data on a line chart
   st.line_chart(df)
   return first_day, df
-
-
-def plot_logarithmic(country, notification_percentual):
-  plt.rcParams["font.family"] = "Times New Roman"
-  plt.rcParams["font.size"] = "8"
-  plt.rcParams['axes.grid'] = True
-  # filter target data
-  cases = country[0]["timelines"]["confirmed"]["timeline"]
-  #print ('CASES', cases, 'ITEMS', cases.items())
-  deaths =  country[0]["timelines"]["deaths"]["timeline"]
-  # create dataframes for cases
-  cases_df = pd.DataFrame(list(cases.items()),
-               columns=['day', 'cases'])
-  # apply subnotification percentage
-  # if none was entered, it is == 1
-  cases_df.cases = cases_df.cases*100/notification_percentual
-  #a = [pow(10, i) for i in range(10)]
-  fig = plt.figure()
-  ax = fig.add_subplot(2, 1, 1)
-
-  line, = ax.plot(cases_df.cases, color='blue', lw=1)
-  ax.set_yscale('log')
-  p.show()
-  st.write('**Logarithmic scale**')
-  st.write('This scale makes it possible to fit a large or widespread set of results onto a graph that might otherwise not fit in a linear way. A logarithmic graph can also help make it clear if the apparent evening-out of the curve started to change. While a linear curve would keep on pushing ever higher regardless, the logarithmic graph would highlight any substantial changes to the trend – whether upward or downward. It’s an approach that is often preferred when there are huge numbers involved and a linear scale would just produce a dramatic-looking exponential curve.')
-  st.pyplot()
 
 
 def plot_daily_increase(select, first_day, df):
@@ -505,6 +541,18 @@ def prediction_of_deaths(df, notification_percentual, pred):
 
 if __name__ == '__main__':
   main()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
