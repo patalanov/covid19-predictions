@@ -162,7 +162,7 @@ def main():
 
 
 # - world data - alpha3 code for countries 
-@st.cache(suppress_st_warning=True)
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def get_codes():
   # global, generic data
   df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
@@ -190,7 +190,7 @@ def get_codes():
 
 
 
-@st.cache(suppress_st_warning=True)
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def get_top_10():
   df = pd.read_csv('https://covid.ourworldindata.org/data/ecdc/total_cases.csv')
   
@@ -208,7 +208,7 @@ def get_top_10():
 
 
 # - single country data - use alpha2 code for countries 
-@st.cache(suppress_st_warning=True)
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def get_data(countries_and_codes, select):
   # instantiate wrapper to data api
   covid19 = COVID19Py.COVID19()
